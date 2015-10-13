@@ -1,0 +1,13 @@
+start on runlevel [2345]
+
+setuid deploy
+
+env APPNAME="<%= @name %>"
+env APP_DIR="<%= @directory %>"
+env USERNAME="<%= @owner %>"
+env PUMA_DIR="<%= @directory %>/shared/puma"
+
+chdir <%= @working_dir %>
+exec <%= @exec_prefix %> <%= @bin_path %> -C <%= @config_path %>
+
+respawn
