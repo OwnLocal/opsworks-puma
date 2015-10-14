@@ -62,8 +62,8 @@ define :puma_config, :owner => 'deploy', :group => 'nginx', :directory  => nil, 
     path "/etc/init/#{params[:name]}.conf"
     cookbook "opsworks-puma"
     mode "0644"
-    owner root
-    group root
+    owner 'root'
+    group 'root'
     variables params
     notifies :start, "service[#{params[:name]}]", :delayed
   end
