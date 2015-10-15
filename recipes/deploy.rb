@@ -11,4 +11,8 @@ node[:deploy].each do |application, deploy|
     application application
     deploy deploy
   end if deploy[:puma]
+
+  service application do
+    action :restart
+  end
 end
