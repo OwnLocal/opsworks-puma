@@ -7,6 +7,10 @@ env APP_DIR="<%= @directory %>"
 env USERNAME="<%= @owner %>"
 env PUMA_DIR="<%= @directory %>/shared/puma"
 
+<% node[:deploy][@name][:environment_variables].each do |key,value| %>
+env <%= key %>=<%= value %>
+<% end %>
+
 chdir <%= @working_dir %>
 exec <%= @exec_prefix %> <%= @bin_path %> -C <%= @config_path %>
 
