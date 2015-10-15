@@ -13,6 +13,7 @@ node[:deploy].each do |application, deploy|
   end if deploy[:puma]
 
   service application do
+    provider Chef::Provider::Service::Upstart
     action :restart
   end
 end
