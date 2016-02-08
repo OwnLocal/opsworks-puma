@@ -79,4 +79,9 @@ define :puma_config, :owner => 'deploy', :group => 'nginx', :directory  => nil, 
       variables params
     end
   end
+
+  execute "hard_restart_#{params[:name]}" do
+    command "/usr/sbin/service #{params[:name]} restart"
+    action :nothing
+  end
 end
