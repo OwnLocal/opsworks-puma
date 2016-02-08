@@ -14,6 +14,7 @@ node[:deploy].each do |application, deploy|
 
   service application do
     provider Chef::Provider::Service::Upstart
+    supports :start => true, :stop => true, :restart => false
     action :restart
   end
 end
