@@ -53,7 +53,7 @@ define :puma_config, :owner => 'deploy', :group => 'nginx', :directory  => nil, 
   end
 
   service params[:name] do
-    supports :start => true, :stop => true, :restart => true
+    supports :start => true, :stop => true, :restart => false
     action :nothing
   end
 
