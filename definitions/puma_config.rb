@@ -73,8 +73,16 @@ define :puma_config, :owner => 'deploy', :group => 'nginx', :directory  => nil, 
       cookbook "logrotate"
       path [ params[:stdout_redirect], params[:stderr_redirect] ]
       frequency "daily"
-      rotate 30
+      rotate 7 
       size "5M"
+      options ["missingok", "compress", "delaycompress", "notifempty", "dateext"]
+      variables params
+    end
+
+    logrotate_app 'nginx' do
+      path node[:nginx][:log_dir]
+      frequency 'daily'
+      rotate 7
       options ["missingok", "compress", "delaycompress", "notifempty", "dateext"]
       variables params
     end
