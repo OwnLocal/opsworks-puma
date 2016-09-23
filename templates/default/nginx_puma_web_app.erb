@@ -33,9 +33,14 @@ server {
 
     proxy_redirect off;
 
-    # If you don't find the filename in the static files
-    # Then request it from the puma server
-    if (!-f $request_filename) {
+    if (-f $request_filename) {
+      # If the static file is found then add CORS headers
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+      add_header 'Access-Control-Max-Age' 86400;
+    } else {
+      # If you don't find the filename in the static files
+      # Then request it from the puma server
       proxy_pass http://puma_<%= @application[:domains].first %>;
       break;
     }
@@ -90,9 +95,14 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
-    # If you don't find the filename in the static files
-    # Then request it from the puma server
-    if (!-f $request_filename) {
+    if (-f $request_filename) {
+      # If the static file is found then add CORS headers
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+      add_header 'Access-Control-Max-Age' 86400;
+    } else {
+      # If you don't find the filename in the static files
+      # Then request it from the puma server
       proxy_pass http://puma_<%= @application[:domains].first %>;
       break;
     }
