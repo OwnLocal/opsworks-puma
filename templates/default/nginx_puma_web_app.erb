@@ -38,7 +38,9 @@ server {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
       add_header 'Access-Control-Max-Age' 86400;
-    } else {
+    }
+
+    if (!-f $request_filename) {
       # If you don't find the filename in the static files
       # Then request it from the puma server
       proxy_pass http://puma_<%= @application[:domains].first %>;
@@ -100,7 +102,9 @@ server {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
       add_header 'Access-Control-Max-Age' 86400;
-    } else {
+    }
+
+    if (!-f $request_filename) {
       # If you don't find the filename in the static files
       # Then request it from the puma server
       proxy_pass http://puma_<%= @application[:domains].first %>;
