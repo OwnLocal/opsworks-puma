@@ -1,3 +1,5 @@
+limit_req_zone $binary_remote_addr zone=one:64m rate=1r/s;
+
 upstream puma_<%= @application[:domains].first %> {
 server unix://<%= @application[:deploy_to]%>/shared/puma/<%= @application_name %>.sock fail_timeout=0;
 }
@@ -6,8 +8,6 @@ server {
   listen <%= @params[:http_port] %>;
   server_name <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
   access_log off;
-
-  limit_req_zone $binary_remote_addr zone=one:64m rate=1r/s;
 
   keepalive_timeout 5;
 
@@ -18,8 +18,6 @@ server {
   <% end %>
 
   location / {
-    limit_req zone=one burst=10;
-
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
 
@@ -39,10 +37,12 @@ server {
 
     # If you don't find the filename in the static files
     # Then request it from the puma server
-    if (!-f $request_filename) {
-      proxy_pass http://puma_<%= @application[:domains].first %>;
-      break;
-    }
+    try_files $uri @puma;
+  }
+
+  location @puma {
+    limit_req zone=one burst=10;
+    proxy_pass http://puma_<%= @application[:domains].first %>;
   }
 
   location /nginx_status {
