@@ -106,12 +106,7 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
-    # If you don't find the filename in the static files
-    # Then request it from the puma server
-    if (!-f $request_filename) {
-      proxy_pass http://puma_<%= @application[:domains].first %>;
-      break;
-    }
+    proxy_pass http://puma_<%= @application[:domains].first %>;
   }
 
   error_page 500 502 503 504 /500.html;
