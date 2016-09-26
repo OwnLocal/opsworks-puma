@@ -116,6 +116,23 @@ on_worker_boot do
 end
 <% end %>
 
+before_fork do
+<% if @worker_killer[:enabled] %>
+  # If puma_worker_killer is there and enabled, let's use it!
+  require 'puma_worker_killer'
+  PumaWorkerKiller.config do |config|
+    config.ram           = <%= @worker_killer[:ram] %> # mb
+    config.frequency     = <%= @worker_killer[:frequency] || 60 %>     # seconds
+    config.percent_usage = <%= @worker_killer[:percent_usage] || 0.90 %>
+    config.rolling_restart_frequency = <%= @worker_killer[:rolling_restart_frequency] || 12 * 3600 %> # 12 hours in seconds
+  end
+  PumaWorkerKiller.start
+rescue LoadError
+  # No puma_worker_killer so nevermind
+  puts "puma_worker_killer gem not found, worker killer will not be used!"
+<% end %>
+end
+
 # === Puma control rack application ===
 
 # Start the puma control rack application on "url". This application can
