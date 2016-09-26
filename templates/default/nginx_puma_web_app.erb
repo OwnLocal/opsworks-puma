@@ -1,4 +1,4 @@
-limit_req_zone $binary_remote_addr zone=one:64m rate=2r/s;
+limit_req_zone $binary_remote_addr zone=one:64m rate=1r/s;
 
 upstream puma_<%= @application[:domains].first %> {
 server unix://<%= @application[:deploy_to]%>/shared/puma/<%= @application_name %>.sock fail_timeout=0;
@@ -27,7 +27,7 @@ server {
   }
 
   location @puma {
-    limit_req zone=one burst=10;
+    limit_req zone=one burst=2;
 
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
@@ -99,7 +99,7 @@ server {
   }
 
   location @puma {
-    limit_req zone=one burst=10;
+    limit_req zone=one burst=2;
 
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
