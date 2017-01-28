@@ -11,6 +11,8 @@ env PUMA_DIR="<%= @directory %>/shared/puma"
 env <%= key %>=<%= value %>
 <% end %>
 
+limit nofile unlimited
+
 chdir <%= @working_dir %>
 exec <%= @exec_prefix %> <%= @bin_path %> -C <%= @config_path %>
 
